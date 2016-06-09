@@ -63,7 +63,16 @@ Sprint::Sprint(){
 }
 
 void Sprint::setup(){
-    static const std::string HELP("Commands: begin chore estimate help list remove quit");
+    static const std::string HELP(
+        "Available commands:\n"
+        "h, help      Display this help text\n"
+        "a, add       Add a new chore\n"
+        "r, remove    Remove a chore\n"
+        "l, list      List all chores, and who has given them estimates\n"
+        "e, estimate  Provide your estimates for chores\n"
+        "b, begin     Begin the sprint, locking in estimates and distributing chores\n"
+        "q, quit      Quit the program.  All data will be saved"
+    );
     std::cout << HELP << std::endl;
 
     bool beginning = false;
@@ -72,13 +81,13 @@ void Sprint::setup(){
         std::string command;
         std::cout << std::endl << PROMPT;
         std::getline(std::cin, command);
-        if (command == "begin"){ beginning = true; break;}
-        else if (command == "chore") addChore();
-        else if (command == "estimate") estimate();
-        else if (command == "help") std::cout << HELP << std::endl;
-        else if (command == "list") list();
-        else if (command == "remove") remove();
-        else if (command == "quit") break;
+        if (     command == "b" || command == "begin"){   beginning = true; break;}
+        else if (command == "a" || command == "add")      addChore();
+        else if (command == "e" || command == "estimate") estimate();
+        else if (command == "h" || command == "help")     std::cout << HELP << std::endl;
+        else if (command == "l" || command == "list")     list();
+        else if (command == "r" || command == "remove")   remove();
+        else if (command == "q" || command == "quit")     break;
         else
             std::cout << "Invalid command." << std::endl;
 
