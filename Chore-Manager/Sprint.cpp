@@ -48,7 +48,7 @@ Sprint::Sprint(){
 
         // Archive current files
         std::ostringstream oss;
-        oss << _startTime << " " << _endTime;
+        oss << _startTime << "-" << _endTime;
         std::string dirName = oss.str();
         rename("sprint/start.dat", (dirName + "/start.dat").c_str());
         rename("sprint/end.dat", (dirName + "/end.dat").c_str());

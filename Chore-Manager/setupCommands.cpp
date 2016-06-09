@@ -16,21 +16,60 @@ void Sprint::addChore(){
 }
 
 void Sprint::estimate(){
+    std::string name;
+    std::cout << "Enter your name: " << PROMPT;
+    std::getline(std::cin, name);
+    bool found = false;
+    for (const std::string &person : _people)
+        if (person == name){
+            found = true;
+            break;
+        }
+    if (!found){
+        std::cout << "Invalid name." << std::endl;
+        return;
+    }
 
+    list();
+    std::cout << "Please enter the number of the chore to estimate, or 0 to estimate all chores: " << PROMPT;
+    size_t toEstimate;
+    std::cin >> toEstimate;
+    std::string dummy;
+    std::getline(std::cin, dummy);
+
+    if (toEstimate > _chores.size()){
+        std::cout << "Invalid number" << std::endl;
+        return;
+    }
+
+    if (toEstimate > 0){
+        size_t i = 0;
+        for (const Chore &choreConst : _chores)
+            if (++i == toEstimate){
+
+                Chore &chore = const_cast<Chore &>(choreConst);
+                std::cout << "Estimate for \"" << chore.name() << "\": " << PROMPT;
+                size_t estimate;
+                std::cin >> estimate;
+                std::getline(std::cin, dummy);
+                chore.estimate(name, estimate);
+
+                return;
+            }
+    }
 }
 
 void Sprint::list(){
-    for (const Chore &chore : _chores)
-        std::cout << "  " << chore.name() << std::endl;
-}
-
-void Sprint::remove(){
     size_t i = 0;
     for (const Chore &chore : _chores)
         std::cout << "  "
                   << (i <= 10 ? " " : "")
                   << (i <= 100 ? " " : "")
                   << ++i << "  " << chore.name() << std::endl;
+}
+
+void Sprint::remove(){
+    list();
     std::cout << "Please enter the number of the chore to remove: " << PROMPT;
     size_t toRemove;
     std::cin >> toRemove;
@@ -40,7 +79,7 @@ void Sprint::remove(){
     if (toRemove == 0 || toRemove > _chores.size())
         std::cout << "Invalid number." << std::endl;
     else{
-        i = 0;
+        size_t i = 0;
         for (std::set<Chore>::iterator it = _chores.begin(); it != _chores.end(); ++it)
             if (++i == toRemove){
                 _chores.erase(it);

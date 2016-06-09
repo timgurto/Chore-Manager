@@ -20,6 +20,8 @@ public:
     const std::string &name() const { return _name; }
     int estimate(const std::string &name) { return _estimates[name]; }
 
+    void estimate(const std::string &name, size_t estimate){ _estimates[name] = estimate; }
+
     bool operator<(const Chore &rhs) const { return _name.compare(rhs._name) < 0; }
 };
 
