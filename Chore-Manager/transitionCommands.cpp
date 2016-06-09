@@ -1,5 +1,6 @@
 // (C) 2016 Tim Gurto
 
+#include <iomanip>
 #include <iostream>
 #include <set>
 #include <stack>
@@ -55,7 +56,7 @@ void Sprint::allocate(){
 
     std::multiset<Chore, highestMax> sortedChores;
     for (const Chore &originalChore : _chores){
-        if (chore.owner != "")
+        if (originalChore.owner() != "")
             continue;
         Chore chore = originalChore;
         chore.minEstimate = chore.maxEstimate = modifiers[0] * chore.estimate(_people[0]);
@@ -145,15 +146,43 @@ void Sprint::allocate(){
         nameLookup[_people[i]] = i;
 
     // Also include non-shared chores
+    std::vector<double> extra(_people.size(), 0);
     for (const Chore &chore : _chores){
-        if (chore.owner == "")
+        if (chore.owner() == "")
             continue;
         Task task;
         task.name = chore.name();
-        task.assignee = nameLookup[chore.owner];
-        task.effort = modifiers[task.assignee] * chore.estimate(chore.owner);
+        task.assignee = nameLookup[chore.owner()];
+        task.effort = modifiers[task.assignee] * chore.estimate(chore.owner());
         task.isDone = false;
         _tasks.insert(task);
+        extra[task.assignee] += task.effort;
     }
 
+    std::cout << "Tasks have been allocated." << std::endl << std::endl;
+    std::streamsize oldPrecision = std::cout.precision();
+    for (size_t i = 0; i != _people.size(); ++i){
+        std::cout.precision(4);
+        std::cout << _people[i] << std::endl
+                  << "             Shared chores: " << std::setw(4) << totals[i]
+                  << std::endl
+                  << "           Personal chores: " << std::setw(4) << extra[i]
+                  << std::endl
+                  << "                     TOTAL: " << std::setw(4) << (totals[i] + extra[i])
+                  << std::endl;
+        std::cout.precision(oldPrecision);
+
+        size_t num = 0;
+        for (const Task &task : _tasks)
+            if (task.assignee == i){
+                std::cout << std::setw(3) << ++num << "  " << task.name;
+                for (size_t i = task.name.size(); i < 30; ++i)
+                    std::cout << ' ';
+                
+                std::cout.precision(4);
+                std::cout << std::setw(4) << task.effort << std::endl;
+                std::cout.precision(oldPrecision);
+            }
+        std::cout << std::endl;
+    }
 }

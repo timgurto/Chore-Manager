@@ -71,6 +71,7 @@
     <ClInclude Include="Chore.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Sprint.h" />
+    <ClInclude Include="Task.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

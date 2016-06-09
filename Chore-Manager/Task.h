@@ -6,12 +6,12 @@
 #include <string>
 
 struct Task{
-    std::string _name;
-    size_t _assignee;
-    double _effort;
-    bool _isDone;
+    std::string name;
+    size_t assignee;
+    double effort;
+    bool isDone;
 
-    bool operator<(const Task &rhs) const{ return _name.compare(rhs._name) < 0; }
+    bool operator<(const Task &rhs) const{ return name.compare(rhs.name) < 0; }
 };
 
 #endif

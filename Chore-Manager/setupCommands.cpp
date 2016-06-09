@@ -44,7 +44,7 @@ void Sprint::estimate(){
                   << (++i < 10 ? " " : "")
                   << (i < 100 ? " " : "")
                   << i << "  " << chore.name();
-        for (size_t j = chore.name().length(); j != 30; ++j)
+        for (size_t j = chore.name().length(); j < 30; ++j)
             std::cout << ' ';
         size_t estimate = chore.estimate(name);
         if (estimate == 0)
@@ -96,7 +96,7 @@ void Sprint::estimate(){
                   << (++i < 10 ? " " : "")
                   << (i < 100 ? " " : "")
                   << i << "  " << chore.name();
-        for (size_t j = chore.name().length(); j != 30; ++j)
+        for (size_t j = chore.name().length(); j < 30; ++j)
             std::cout << ' ';
         std::cout << PROMPT;
 
@@ -121,7 +121,7 @@ void Sprint::list(){
                   << (++i < 10 ? " " : "")
                   << (i < 100 ? " " : "")
                   << i << "  " << chore.name();
-        for (size_t j = chore.name().length(); j != 30; ++j)
+        for (size_t j = chore.name().length(); j < 30; ++j)
             std::cout << ' ';
         for (const std::string &person : _people) {
             char c;
