@@ -30,6 +30,8 @@ public:
     void remove(); // Remove a chore
     void backup(); // Back up sprint info
 
+    bool checkEstimates(); // Make sure all estimates are in
+
 };
 
 #endif

@@ -111,13 +111,14 @@ void Sprint::setup(){
         std::string command;
         std::cout << std::endl << PROMPT;
         std::getline(std::cin, command);
-        if (     command == "b" || command == "begin"){   beginning = true; break;}
+        if (     command == "b" || command == "begin")
+            { if (checkEstimates()) {beginning = true; break;}}
         else if (command == "a" || command == "add")      addChore();
         else if (command == "e" || command == "estimate") estimate();
         else if (command == "h" || command == "help")     std::cout << HELP << std::endl;
         else if (command == "l" || command == "list")     list();
         else if (command == "r" || command == "remove")   remove();
-        else if (command == "q" || command == "quit")     break;
+        else if (command == "q" || command == "quit")     { backup(); break; }
         else
             std::cout << "Invalid command." << std::endl;
 
