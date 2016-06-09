@@ -30,7 +30,22 @@ void Sprint::estimate(){
         return;
     }
 
-    list();
+    // Display list, with estimates
+        size_t i = 0;
+    for (const Chore &chore : _chores){
+        std::cout << "  "
+                  << (i <= 10 ? " " : "")
+                  << (i <= 100 ? " " : "")
+                  << ++i << "  " << chore.name();
+        for (size_t j = chore.name().length(); j != 30; ++j)
+            std::cout << ' ';
+        size_t thisEstimate = chore.estimate(name);
+        std::cout << (thisEstimate < 10 ? " " : "")
+                  << (thisEstimate < 100 ? " " : "")
+                  << (thisEstimate == 0 ? '-' : thisEstimate)
+                  << std::endl;
+    }
+
     std::cout << "Please enter the number of the chore to estimate, or 0 to estimate all chores: " << PROMPT;
     size_t toEstimate;
     std::cin >> toEstimate;
@@ -63,8 +78,8 @@ void Sprint::list(){
     size_t i = 0;
     for (const Chore &chore : _chores)
         std::cout << "  "
-                  << (i <= 10 ? " " : "")
-                  << (i <= 100 ? " " : "")
+                  << (i < 10 ? " " : "")
+                  << (i < 100 ? " " : "")
                   << ++i << "  " << chore.name() << std::endl;
 }
 

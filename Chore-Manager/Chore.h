@@ -9,7 +9,7 @@
 class Chore{
     std::string _name;
     std::string _owner; // If blank, a shared chore.
-    std::map<std::string, int> _estimates; // 0 = unestimated
+    std::map<std::string, size_t> _estimates; // 0 = unestimated
     std::list<std::string> _people;
 
 public:
@@ -18,7 +18,12 @@ public:
         _owner(owner){}
 
     const std::string &name() const { return _name; }
-    int estimate(const std::string &name) { return _estimates[name]; }
+    size_t estimate(const std::string &name) const {
+        auto it = _estimates.find(name);
+        if (it == _estimates.end())
+            return 0;
+        return it->second;
+    }
 
     void estimate(const std::string &name, size_t estimate){ _estimates[name] = estimate; }
 
