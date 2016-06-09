@@ -11,6 +11,15 @@
 
 Sprint::Sprint(){
 
+    // Get people
+    std::list<std::string> people;
+    {
+        std::ifstream peopleFile("people.dat");
+        std::string name;
+        while (std::getline(peopleFile, name))
+            people.push_back(name);
+    }
+
     /* Check current sprint:
     If no start date, none is in progress; resume setting it up.
     If end date has expired, archive it and start setting up a new one.
@@ -55,8 +64,30 @@ Sprint::Sprint(){
 }
 
 void Sprint::setup(){
+    static const std::string HELP("Commands: begin chore estimate list remove quit");
+    std::cout << HELP << std::endl << PROMPT;
 
+    bool beginning = false;
+
+    while (true){
+        std::string command;
+        std::getline(std::cin, command);
+        if (command == "begin"){ beginning = true; break;}
+        else if (command == "chore") addChore();
+        else if (command == "estimate") estimate();
+        else if (command == "list") list();
+        else if (command == "remove") remove();
+        else if (command == "quit") break;
+    }
+
+    // Back up sprint info
+    backup();
+
+    if (beginning){
+        // Finalize and begin sprint
+    }
 }
+
 
 void Sprint::resume(){
 

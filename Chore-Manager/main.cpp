@@ -13,6 +13,6 @@ int main(){
     if (sprint.inProgress()){
         sprint.resume();
     }else{
-        //Setup
+        sprint.setup();
     }
 }

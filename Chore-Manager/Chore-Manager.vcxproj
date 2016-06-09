@@ -62,6 +62,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="setupCommands.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sprint.cpp" />
   </ItemGroup>
