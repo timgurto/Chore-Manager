@@ -64,17 +64,19 @@ Sprint::Sprint(){
 }
 
 void Sprint::setup(){
-    static const std::string HELP("Commands: begin chore estimate list remove quit");
-    std::cout << HELP << std::endl << PROMPT;
+    static const std::string HELP("Commands: begin chore estimate help list remove quit");
+    std::cout << HELP << std::endl;
 
     bool beginning = false;
 
     while (true){
         std::string command;
+        std::cout << PROMPT;
         std::getline(std::cin, command);
         if (command == "begin"){ beginning = true; break;}
         else if (command == "chore") addChore();
         else if (command == "estimate") estimate();
+        else if (command == "help") std::cout << HELP << std::endl;
         else if (command == "list") list();
         else if (command == "remove") remove();
         else if (command == "quit") break;
@@ -85,6 +87,7 @@ void Sprint::setup(){
 
     if (beginning){
         // Finalize and begin sprint
+        resume();
     }
 }
 
