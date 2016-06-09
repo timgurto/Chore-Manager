@@ -4,6 +4,7 @@
 #include <set>
 #include <stack>
 #include <string>
+#include <vector>
 
 #include "Sprint.h"
 
@@ -23,6 +24,15 @@ bool Sprint::checkEstimates(){
         std::cout << ' ' << name;
     std::cout << std::endl;
     return false;
+}
+
+double rms(std::vector<double> v){
+    double sumSqr = 0;
+    for (double d : v)
+        sumSqr += d * d;
+    double res = sqrt(sumSqr / v.size());
+    std::cout << "RMS=" << res << std::endl;
+    return res;
 }
 
 void Sprint::allocate(){
@@ -62,6 +72,7 @@ void Sprint::allocate(){
 
     // Create a stack for each person, and do an initial naive allocation based on preferences.
     std::vector<std::stack<Chore> > stacks(_people.size());
+    std::vector<double> totals(_people.size(), 0);
     for (const Chore &chore : sortedChores){
         size_t prefPerson = 0;
         double min = modifiers[0] * chore.estimate(_people[0]);
@@ -73,6 +84,9 @@ void Sprint::allocate(){
             }
         }
         stacks[prefPerson].push(chore);
+        totals[prefPerson] += min;
     }
 
+    // Calculate fairness (root mean square)
+    rms(totals);
 }
