@@ -16,7 +16,8 @@ public:
         _name(name),
         _owner(owner){}
 
-    int getEstimate(const std::string &name) { return _estimates[name]; }
+    const std::string &name() const { return _name; }
+    int estimate(const std::string &name) { return _estimates[name]; }
 
     bool operator<(const Chore &rhs) const { return _name.compare(rhs._name) < 0; }
 };

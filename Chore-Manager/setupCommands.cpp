@@ -19,7 +19,8 @@ void Sprint::estimate(){
 }
 
 void Sprint::list(){
-
+    for (const Chore &chore : _chores)
+        std::cout << "  " << chore.name() << std::endl;
 }
 
 void Sprint::remove(){
