@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <set>
+#include <stack>
 #include <string>
 
 #include "Sprint.h"
@@ -59,6 +60,19 @@ void Sprint::allocate(){
         sortedChores.insert(chore);
     }
 
-    for (const Chore &chore : sortedChores)
-        std::cout << chore.name() << std::endl;
+    // Create a stack for each person, and do an initial naive allocation based on preferences.
+    std::vector<std::stack<Chore> > stacks(_people.size());
+    for (const Chore &chore : sortedChores){
+        size_t prefPerson = 0;
+        double min = modifiers[0] * chore.estimate(_people[0]);
+        for (size_t i = 1; i != _people.size(); ++i) {
+            double estimate = modifiers[i] * chore.estimate(_people[1]);
+            if (estimate < min){
+                prefPerson = i;
+                min = estimate;
+            }
+        }
+        stacks[prefPerson].push(chore);
+    }
+
 }
