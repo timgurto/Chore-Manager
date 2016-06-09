@@ -7,6 +7,10 @@
 #include "Sprint.h"
 #include "constants.h"
 
+void clearCin(){
+    std::cin.clear(); std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 void Sprint::addChore(){
     std::string name, owner;
     std::cout << "Chore description: ";
@@ -53,8 +57,7 @@ void Sprint::estimate(){
     std::cout << "Please enter the number of the chore to estimate, or 0 to estimate all chores: " << PROMPT;
     size_t toEstimate;
     std::cin >> toEstimate;
-    std::string dummy;
-    std::getline(std::cin, dummy);
+    clearCin();
 
     if (toEstimate > _chores.size()){
         std::cout << "Invalid number" << std::endl;
@@ -70,7 +73,7 @@ void Sprint::estimate(){
                 std::cout << "Estimate for \"" << chore.name() << "\": " << PROMPT;
                 size_t estimate;
                 std::cin >> estimate;
-                std::getline(std::cin, dummy);
+                clearCin();
                 chore.estimate(name, estimate);
 
                 return;
@@ -92,7 +95,7 @@ void Sprint::estimate(){
 
         size_t estimate;
         std::cin >> estimate;
-        std::getline(std::cin, dummy);
+        clearCin();
         chore.estimate(name, estimate);
     }
 
@@ -112,8 +115,7 @@ void Sprint::remove(){
     std::cout << "Please enter the number of the chore to remove: " << PROMPT;
     size_t toRemove;
     std::cin >> toRemove;
-    std::string dummy;
-    std::getline(std::cin, dummy);
+    clearCin();
 
     if (toRemove == 0 || toRemove > _chores.size())
         std::cout << "Invalid number." << std::endl;
