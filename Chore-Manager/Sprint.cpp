@@ -40,12 +40,12 @@ Sprint::Sprint(){
                 std::istringstream iss(line);
                 static const size_t BUF_SIZE = 100;
                 char buffer[BUF_SIZE+1];
-                iss.get(buffer, BUF_SIZE, ',');
+                iss.get(buffer, BUF_SIZE, DELIM);
                 std::string name(buffer);
                 iss.ignore();
                 if (name == "")
                     continue;
-                iss.get(buffer, BUF_SIZE, ',');
+                iss.get(buffer, BUF_SIZE, DELIM);
                 std::string owner(buffer);
                 if (owner == SHARED)
                     owner = "";
@@ -56,7 +56,7 @@ Sprint::Sprint(){
                     size_t estimate;
                     iss >> estimate;
                     c.estimate(person, estimate);
-                    _chores.insert(c);
+                _chores.insert(c);
                 }
             }
 
