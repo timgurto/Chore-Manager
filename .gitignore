@@ -15,3 +15,5 @@
 *.suo
 *.filters
 sprint/chores.dat
+sprint/start.dat
+sprint/end.dat

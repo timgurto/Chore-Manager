@@ -1,5 +1,6 @@
 // (C) 2016 Tim Gurto
 
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <set>
@@ -43,6 +44,8 @@ double unfairness(std::vector<double> v){
 }
 
 void Sprint::allocate(){
+    std::cout << std::endl << "Allocating tasks..." << std::endl;
+
     // Calculate each person's modifier.  All estimates will be multiplied by this number.
     std::vector<double> modifiers(_people.size());
     for (size_t i = 0; i != _people.size(); ++i) {
@@ -198,6 +201,7 @@ void Sprint::allocate(){
 }
 
 void Sprint::getEndTime(){
+    time_t endTime;
     while (true) {
         size_t year, month, day, hour;
 
@@ -208,9 +212,8 @@ void Sprint::getEndTime(){
         std::cout << " Hour (0-23): " << PROMPT; std::cin >> hour;
         std::cin.clear(); std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        time_t rawTime;
-        time(&rawTime);
-        tm *timeInfo = localtime(&rawTime);
+        time(&endTime);
+        tm *timeInfo = localtime(&endTime);
         timeInfo->tm_year = year - 1900;
         timeInfo->tm_mon = month - 1;
         timeInfo->tm_mday = day;
@@ -225,8 +228,12 @@ void Sprint::getEndTime(){
         if (response == "y")
             break;
     }
+
+    std::ofstream endFile("sprint/end.dat");
+    endFile << endTime;
 }
 
 void Sprint::recordStartTime(){
-
+    std::ofstream startFile("sprint/start.dat");
+    startFile << time(0);
 }
