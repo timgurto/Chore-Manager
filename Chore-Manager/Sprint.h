@@ -33,6 +33,8 @@ public:
     void backup(); // Back up sprint info
 
     bool checkEstimates(); // Make sure all estimates are in
+    void getEndTime(); // Ask user for when the sprint ends, and write it to a file.
+    void recordStartTime(); // Get current time, and write it to a file.
     void allocate();
 
 };

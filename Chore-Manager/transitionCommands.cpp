@@ -9,6 +9,7 @@
 
 #include "Sprint.h"
 #include "Task.h"
+#include "constants.h"
 
 bool Sprint::checkEstimates(){
     // Make sure all estimates are in
@@ -194,4 +195,38 @@ void Sprint::allocate(){
             }
         std::cout << std::endl;
     }
+}
+
+void Sprint::getEndTime(){
+    while (true) {
+        size_t year, month, day, hour;
+
+        std::cout << "When will this sprint end?" << std::endl;
+        std::cout << "        Year: " << PROMPT; std::cin >> year;
+        std::cout << "Month (1-12): " << PROMPT; std::cin >> month;
+        std::cout << "         Day: " << PROMPT; std::cin >> day;
+        std::cout << " Hour (0-23): " << PROMPT; std::cin >> hour;
+        std::cin.clear(); std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        time_t rawTime;
+        time(&rawTime);
+        tm *timeInfo = localtime(&rawTime);
+        timeInfo->tm_year = year - 1900;
+        timeInfo->tm_mon = month - 1;
+        timeInfo->tm_mday = day;
+        timeInfo->tm_hour = hour;
+        timeInfo->tm_min = timeInfo->tm_sec = 0;
+        mktime(timeInfo);
+
+        std::cout << "The sprint will end at " << asctime(timeInfo)
+                  << "Is this correct? (y/n) " << PROMPT;
+        std::string response;
+        std::getline(std::cin, response);
+        if (response == "y")
+            break;
+    }
+}
+
+void Sprint::recordStartTime(){
+
 }

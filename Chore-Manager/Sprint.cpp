@@ -127,7 +127,10 @@ void Sprint::setup(){
 
     if (beginning){
         // Finalize and begin sprint
+
+        getEndTime();
         allocate();
+        recordStartTime();
 
         resume();
     }
