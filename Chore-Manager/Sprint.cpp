@@ -71,7 +71,7 @@ void Sprint::setup(){
 
     while (true){
         std::string command;
-        std::cout << PROMPT;
+        std::cout << std::endl << PROMPT;
         std::getline(std::cin, command);
         if (command == "begin"){ beginning = true; break;}
         else if (command == "chore") addChore();
@@ -82,10 +82,9 @@ void Sprint::setup(){
         else if (command == "quit") break;
         else
             std::cout << "Invalid command." << std::endl;
-    }
 
-    // Back up sprint info
-    backup();
+        backup(); // After every command completes.
+    }
 
     if (beginning){
         // Finalize and begin sprint

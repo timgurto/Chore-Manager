@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Sprint.h"
+#include "constants.h"
 
 void Sprint::addChore(){
     std::string name, owner;
@@ -24,7 +25,28 @@ void Sprint::list(){
 }
 
 void Sprint::remove(){
+    size_t i = 0;
+    for (const Chore &chore : _chores)
+        std::cout << "  "
+                  << (i <= 10 ? " " : "")
+                  << (i <= 100 ? " " : "")
+                  << ++i << "  " << chore.name() << std::endl;
+    std::cout << "Please enter the number of the chore to remove: " << PROMPT;
+    size_t toRemove;
+    std::cin >> toRemove;
+    std::string dummy;
+    std::getline(std::cin, dummy);
 
+    if (toRemove == 0 || toRemove > _chores.size())
+        std::cout << "Invalid number." << std::endl;
+    else{
+        i = 0;
+        for (std::set<Chore>::iterator it = _chores.begin(); it != _chores.end(); ++it)
+            if (++i == toRemove){
+                _chores.erase(it);
+                break;
+            }
+    }
 }
 
 void Sprint::backup(){
