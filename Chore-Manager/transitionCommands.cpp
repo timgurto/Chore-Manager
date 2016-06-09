@@ -87,6 +87,42 @@ void Sprint::allocate(){
         totals[prefPerson] += min;
     }
 
-    // Calculate fairness (root mean square)
-    rms(totals);
+    while (true) {
+
+        // Try giving smallest-max item from biggest person to smallest
+        size_t biggestPerson = 0;
+        for (size_t i = 1; i != _people.size(); ++i)
+            if (totals[i] > totals[biggestPerson])
+                biggestPerson = i;
+        std::vector<double> rmsTest(_people.size());
+        rmsTest[biggestPerson] = rms(totals);
+        Chore toReallocate = stacks[biggestPerson].top();
+        totals[biggestPerson] -= toReallocate.minEstimate;
+
+        // Test fairness with each other person
+        for (size_t i = 0; i != _people.size(); ++i){
+            if (i == biggestPerson)
+                continue;
+            double estimate = modifiers[i] * toReallocate.estimate(_people[i]);
+            totals[i] += estimate;
+            rmsTest[i] = rms(totals);
+            totals[i] -= estimate;
+        }
+        totals[biggestPerson] += toReallocate.minEstimate;
+
+        // Check which is the most fair
+        size_t target = 0;
+        for (size_t i = 1; i != _people.size(); ++i)
+            if (rmsTest[i] < rmsTest[target])
+                target = i;
+
+        if (target == biggestPerson)
+            break; // We're done allocating.
+
+        totals[biggestPerson] -= toReallocate.minEstimate;
+        totals[target] += modifiers[target] * toReallocate.estimate(_people[target]);
+        stacks[biggestPerson].pop();
+        stacks[target].push(toReallocate);
+    }
+
 }
