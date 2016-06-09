@@ -28,11 +28,17 @@ bool Sprint::checkEstimates(){
     return false;
 }
 
-double rms(std::vector<double> v){
-    double sumSqr = 0;
+// Some metric.  zero = completely fair.
+double unfairness(std::vector<double> v){
+    // Variance
+    double mean = 0;
     for (double d : v)
-        sumSqr += d * d;
-    return sqrt(sumSqr / v.size());
+        mean += d;
+    mean = mean / v.size();
+    double variance = 0;
+    for (double d : v)
+        variance +=  (d - mean) * (d - mean);
+    return variance;
 }
 
 void Sprint::allocate(){
@@ -89,6 +95,8 @@ void Sprint::allocate(){
         totals[prefPerson] += min;
     }
 
+    std::cout << "Unfairness=" << unfairness(totals) << std::endl;
+
     while (true) {
 
         // Try giving smallest-max item from biggest person to smallest
@@ -96,8 +104,8 @@ void Sprint::allocate(){
         for (size_t i = 1; i != _people.size(); ++i)
             if (totals[i] > totals[biggestPerson])
                 biggestPerson = i;
-        std::vector<double> rmsTest(_people.size());
-        rmsTest[biggestPerson] = rms(totals);
+        std::vector<double> unfairnessTest(_people.size());
+        unfairnessTest[biggestPerson] = unfairness(totals);
         Chore toReallocate = stacks[biggestPerson].top();
         totals[biggestPerson] -= toReallocate.minEstimate;
 
@@ -107,7 +115,7 @@ void Sprint::allocate(){
                 continue;
             double estimate = modifiers[i] * toReallocate.estimate(_people[i]);
             totals[i] += estimate;
-            rmsTest[i] = rms(totals);
+            unfairnessTest[i] = unfairness(totals);
             totals[i] -= estimate;
         }
         totals[biggestPerson] += toReallocate.minEstimate;
@@ -115,8 +123,9 @@ void Sprint::allocate(){
         // Check which is the most fair
         size_t target = 0;
         for (size_t i = 1; i != _people.size(); ++i)
-            if (rmsTest[i] < rmsTest[target])
+            if (unfairnessTest[i] < unfairnessTest[target])
                 target = i;
+        std::cout << "Unfairness=" << unfairnessTest[target] << std::endl;
 
         if (target == biggestPerson)
             break; // We're done allocating.
