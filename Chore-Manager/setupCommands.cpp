@@ -130,7 +130,7 @@ void Sprint::remove(){
 void Sprint::backup(){
     std::ofstream choresFile("sprint/chores.dat");
     for (const Chore &chore : _chores){
-        choresFile << chore.name();
+        choresFile << chore.name() << ',' << chore.owner();
         for (const std::string &person : _people)
             choresFile << ',' << chore.estimate(person);
         choresFile << std::endl;

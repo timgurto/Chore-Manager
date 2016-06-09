@@ -18,6 +18,7 @@ public:
         _owner(owner){}
 
     const std::string &name() const { return _name; }
+    const std::string &owner() const { return _owner; }
     size_t estimate(const std::string &name) const {
         auto it = _estimates.find(name);
         if (it == _estimates.end())

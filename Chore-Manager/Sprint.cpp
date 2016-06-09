@@ -31,6 +31,32 @@ Sprint::Sprint(){
         if (!startFile){
             // Resume setup
             _inProgress = false;
+
+            // Load existing data
+            std::ifstream choresFile("sprint/chores.dat");
+            while (choresFile){
+                std::string line;
+                std::getline(choresFile, line);
+                std::istringstream iss(line);
+                static const size_t BUF_SIZE = 100;
+                char buffer[BUF_SIZE+1];
+                iss.get(buffer, BUF_SIZE, ',');
+                std::string name(buffer);
+                iss.ignore();
+                if (name == "")
+                    continue;
+                iss.get(buffer, BUF_SIZE, ',');
+                std::string owner(buffer);
+                Chore c(name, owner);
+                for (const std::string &person : _people){
+                    iss.ignore();
+                    size_t estimate;
+                    iss >> estimate;
+                    c.estimate(person, estimate);
+                    _chores.insert(c);
+                }
+            }
+
             return;
         }
         startFile >> _startTime;
@@ -52,6 +78,7 @@ Sprint::Sprint(){
         std::string dirName = oss.str();
         rename("sprint/start.dat", (dirName + "/start.dat").c_str());
         rename("sprint/end.dat", (dirName + "/end.dat").c_str());
+        rename("sprint/chores.dat", (dirName + "/chores.dat").c_str());
 
         // Set up new sprint
         _inProgress = false;
