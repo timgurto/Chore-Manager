@@ -4,12 +4,16 @@
 #define SPRINT_H
 
 #include <list>
+#include <set>
 #include <string>
+
+#include "Chore.h"
 
 class Sprint{
     time_t _startTime, _endTime;
     bool _inProgress; //whether the sprint has begun (as opposed to still being set up)
     std::list<std::string> _people;
+    std::set<Chore> _chores;
 
 public:
     // Opens the last sprint if possible.  If it is closed, or there is none, create a new sprint.

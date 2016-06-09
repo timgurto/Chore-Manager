@@ -67,6 +67,7 @@
     <ClCompile Include="Sprint.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Chore.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Sprint.h" />
   </ItemGroup>
