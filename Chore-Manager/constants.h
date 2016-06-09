@@ -3,3 +3,5 @@
 #include <string>
 
 const std::string PROMPT = "> ";
+
+const std::string SHARED = "__shared__";

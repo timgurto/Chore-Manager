@@ -47,9 +47,12 @@ Sprint::Sprint(){
                     continue;
                 iss.get(buffer, BUF_SIZE, ',');
                 std::string owner(buffer);
+                if (owner == SHARED)
+                    owner = "";
                 Chore c(name, owner);
                 for (const std::string &person : _people){
-                    iss.ignore();
+                    if (owner != SHARED)
+                        iss.ignore();
                     size_t estimate;
                     iss >> estimate;
                     c.estimate(person, estimate);
