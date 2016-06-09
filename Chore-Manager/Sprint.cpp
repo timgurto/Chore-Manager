@@ -80,6 +80,8 @@ void Sprint::setup(){
         else if (command == "list") list();
         else if (command == "remove") remove();
         else if (command == "quit") break;
+        else
+            std::cout << "Invalid command." << std::endl;
     }
 
     // Back up sprint info
