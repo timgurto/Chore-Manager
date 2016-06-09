@@ -40,10 +40,13 @@ void Sprint::estimate(){
         for (size_t j = chore.name().length(); j != 30; ++j)
             std::cout << ' ';
         size_t estimate = chore.estimate(name);
-        std::cout << (estimate < 10 ? " " : "")
-                  << (estimate < 100 ? " " : "")
-                  << (estimate == 0 ? '-' : estimate)
-                  << std::endl;
+        if (estimate == 0)
+            std::cout << "  -";
+        else
+            std::cout << (estimate < 10 ? " " : "")
+                      << (estimate < 100 ? " " : "")
+                      << (estimate == 0 ? '-' : estimate);
+        std::cout << std::endl;
     }
 
     std::cout << "Please enter the number of the chore to estimate, or 0 to estimate all chores: " << PROMPT;
