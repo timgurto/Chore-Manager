@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Sprint.h"
+#include "Task.h"
 
 bool Sprint::checkEstimates(){
     // Make sure all estimates are in
@@ -30,9 +31,7 @@ double rms(std::vector<double> v){
     double sumSqr = 0;
     for (double d : v)
         sumSqr += d * d;
-    double res = sqrt(sumSqr / v.size());
-    std::cout << "RMS=" << res << std::endl;
-    return res;
+    return sqrt(sumSqr / v.size());
 }
 
 void Sprint::allocate(){
@@ -56,6 +55,8 @@ void Sprint::allocate(){
 
     std::multiset<Chore, highestMax> sortedChores;
     for (const Chore &originalChore : _chores){
+        if (chore.owner != "")
+            continue;
         Chore chore = originalChore;
         chore.minEstimate = chore.maxEstimate = modifiers[0] * chore.estimate(_people[0]);
 
@@ -123,6 +124,36 @@ void Sprint::allocate(){
         totals[target] += modifiers[target] * toReallocate.estimate(_people[target]);
         stacks[biggestPerson].pop();
         stacks[target].push(toReallocate);
+    }
+
+    // Convert chores to tasks
+    for (size_t i = 0; i != _people.size(); ++i)
+        while (!stacks[i].empty()){
+            const Chore &chore = stacks[i].top();
+            Task task;
+            task.name = chore.name();
+            task.assignee = i;
+            task.effort = modifiers[i] * chore.estimate(_people[i]);
+            task.isDone = false;
+            _tasks.insert(task);
+            stacks[i].pop();
+        }
+
+    // TODO fix this by making Chore::_owner an index
+    std::map<std::string, size_t> nameLookup;
+    for (size_t i = 0; i != _people.size(); ++i)
+        nameLookup[_people[i]] = i;
+
+    // Also include non-shared chores
+    for (const Chore &chore : _chores){
+        if (chore.owner == "")
+            continue;
+        Task task;
+        task.name = chore.name();
+        task.assignee = nameLookup[chore.owner];
+        task.effort = modifiers[task.assignee] * chore.estimate(chore.owner);
+        task.isDone = false;
+        _tasks.insert(task);
     }
 
 }
