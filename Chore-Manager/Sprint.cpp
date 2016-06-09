@@ -12,12 +12,11 @@
 Sprint::Sprint(){
 
     // Get people
-    std::list<std::string> people;
     {
         std::ifstream peopleFile("people.dat");
         std::string name;
         while (std::getline(peopleFile, name))
-            people.push_back(name);
+            _people.push_back(name);
     }
 
     /* Check current sprint:
