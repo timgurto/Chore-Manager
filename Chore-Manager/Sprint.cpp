@@ -56,8 +56,8 @@ Sprint::Sprint(){
                     size_t estimate;
                     iss >> estimate;
                     c.estimate(person, estimate);
-                _chores.insert(c);
                 }
+                _chores.insert(c);
             }
 
             return;
@@ -127,6 +127,8 @@ void Sprint::setup(){
 
     if (beginning){
         // Finalize and begin sprint
+        allocate();
+
         resume();
     }
 }

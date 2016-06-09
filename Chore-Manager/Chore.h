@@ -10,12 +10,14 @@ class Chore{
     std::string _name;
     std::string _owner; // If blank, a shared chore.
     std::map<std::string, size_t> _estimates; // 0 = unestimated
-    std::list<std::string> _people;
 
 public:
     Chore(const std::string &name, const std::string &owner):
         _name(name),
         _owner(owner){}
+
+    double
+        minEstimate, maxEstimate;
 
     const std::string &name() const { return _name; }
     const std::string &owner() const { return _owner; }

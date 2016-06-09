@@ -23,3 +23,42 @@ bool Sprint::checkEstimates(){
     std::cout << std::endl;
     return false;
 }
+
+void Sprint::allocate(){
+    // Calculate each person's modifier.  All estimates will be multiplied by this number.
+    std::vector<double> modifiers(_people.size());
+    for (size_t i = 0; i != _people.size(); ++i) {
+        size_t sum = 0;
+        for (const Chore &chore : _chores)
+            if (chore.owner() == "")
+                sum += chore.estimate(_people[i]);
+        modifiers[i] = 100.0 / sum;
+    }
+
+    struct highestMax {
+        bool operator() (const Chore &lhs, const Chore &rhs) const{
+            if (lhs.maxEstimate != rhs.maxEstimate)
+                return lhs.maxEstimate > rhs.maxEstimate;
+            return lhs.minEstimate > rhs.minEstimate;
+        }
+    };
+
+    std::multiset<Chore, highestMax> sortedChores;
+    for (const Chore &originalChore : _chores){
+        Chore chore = originalChore;
+        chore.minEstimate = chore.maxEstimate = modifiers[0] * chore.estimate(_people[0]);
+
+        for (size_t i = 1; i != _people.size(); ++i){
+            double estimate = modifiers[i] * chore.estimate(_people[i]);
+            if (estimate < chore.minEstimate)
+                chore.minEstimate = estimate;
+            if (estimate > chore.maxEstimate)
+                chore.maxEstimate = estimate;
+        }
+
+        sortedChores.insert(chore);
+    }
+
+    for (const Chore &chore : sortedChores)
+        std::cout << chore.name() << std::endl;
+}

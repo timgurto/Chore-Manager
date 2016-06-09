@@ -3,7 +3,7 @@
 #ifndef SPRINT_H
 #define SPRINT_H
 
-#include <list>
+#include <vector>
 #include <set>
 #include <string>
 
@@ -12,7 +12,7 @@
 class Sprint{
     time_t _startTime, _endTime;
     bool _inProgress; //whether the sprint has begun (as opposed to still being set up)
-    std::list<std::string> _people;
+    std::vector<std::string> _people;
     std::set<Chore> _chores;
 
 public:
@@ -31,6 +31,7 @@ public:
     void backup(); // Back up sprint info
 
     bool checkEstimates(); // Make sure all estimates are in
+    void allocate();
 
 };
 
