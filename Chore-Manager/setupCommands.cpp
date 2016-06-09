@@ -38,10 +38,12 @@ void Sprint::estimate(){
     // Display list, with estimates
         size_t i = 0;
     for (const Chore &chore : _chores){
+        if (chore.owner() != "" && chore.owner() != name)
+            continue;
         std::cout << "  "
-                  << (i <= 10 ? " " : "")
-                  << (i <= 100 ? " " : "")
-                  << ++i << "  " << chore.name();
+                  << (++i < 10 ? " " : "")
+                  << (i < 100 ? " " : "")
+                  << i << "  " << chore.name();
         for (size_t j = chore.name().length(); j != 30; ++j)
             std::cout << ' ';
         size_t estimate = chore.estimate(name);
@@ -66,7 +68,9 @@ void Sprint::estimate(){
 
     if (toEstimate > 0){
         size_t i = 0;
-        for (const Chore &choreConst : _chores)
+        for (const Chore &choreConst : _chores) {
+            if (choreConst.owner() != "" && choreConst.owner() != name)
+                continue;
             if (++i == toEstimate){
 
                 Chore &chore = const_cast<Chore &>(choreConst);
@@ -78,17 +82,20 @@ void Sprint::estimate(){
 
                 return;
             }
+        }
         return;
     }
 
     // Estimate all
     std::cout << "Enter an estimate for each item:" << std::endl;
     for (const Chore &choreConst : _chores){
+        if (choreConst.owner() != "" && choreConst.owner() != name)
+            continue;
         Chore &chore = const_cast<Chore &>(choreConst);
         std::cout << "  "
-                  << (i <= 10 ? " " : "")
-                  << (i <= 100 ? " " : "")
-                  << ++i << "  " << chore.name();
+                  << (++i < 10 ? " " : "")
+                  << (i < 100 ? " " : "")
+                  << i << "  " << chore.name();
         for (size_t j = chore.name().length(); j != 30; ++j)
             std::cout << ' ';
         std::cout << PROMPT;
@@ -102,16 +109,43 @@ void Sprint::estimate(){
 }
 
 void Sprint::list(){
+    for (size_t j = 0; j != (30 + 7); ++j)
+        std::cout << ' ';
+    for (const std::string &person : _people)
+        std::cout << ' ' << person.front();
+    std::cout << std::endl;
+
     size_t i = 0;
-    for (const Chore &chore : _chores)
+    for (const Chore &chore : _chores) {
         std::cout << "  "
-                  << (i < 10 ? " " : "")
+                  << (++i < 10 ? " " : "")
                   << (i < 100 ? " " : "")
-                  << ++i << "  " << chore.name() << std::endl;
+                  << i << "  " << chore.name();
+        for (size_t j = chore.name().length(); j != 30; ++j)
+            std::cout << ' ';
+        for (const std::string &person : _people) {
+            char c;
+            if (chore.estimate(person) > 0)
+                c = '.';
+            else if (chore.owner() == "" || chore.owner() == person)
+                c = 'X';
+            else
+                c = ' ';
+            std::cout << ' ' << c;
+        }
+        std::cout << std::endl;
+    }
 }
 
 void Sprint::remove(){
-    list();
+    // Display list
+    size_t i = 0;
+    for (const Chore &chore : _chores)
+        std::cout << "  "
+                  << (++i < 10 ? " " : "")
+                  << (i < 100 ? " " : "")
+                  << i << "  " << chore.name() << std::endl;
+
     std::cout << "Please enter the number of the chore to remove: " << PROMPT;
     size_t toRemove;
     std::cin >> toRemove;
