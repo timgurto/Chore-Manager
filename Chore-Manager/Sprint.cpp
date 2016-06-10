@@ -167,6 +167,8 @@ void Sprint::setup(){
         allocate();
         recordStartTime();
 
+        _inProgress = true;
+        backup();
         resume();
     }
 }
