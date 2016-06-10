@@ -239,10 +239,13 @@ void Sprint::recordStartTime(){
     std::ofstream startFile("sprint/start.dat");
     startFile << time(0) << std::endl;;
 
-    std::ofstream graphData;
-    graphData.open("sprint/burndown.dat", std::ios_base::app);
-    graphData << time(0);
-    for (size_t i = 0; i != _people.size(); ++i)
-        graphData << ',' << effortRemaining[i];
-    graphData << std::endl;
+    {
+        std::ofstream graphData;
+        graphData.open("sprint/burndown.dat", std::ios_base::app);
+        graphData << time(0);
+        for (size_t i = 0; i != _people.size(); ++i)
+            graphData << ',' << effortRemaining[i];
+        graphData << std::endl;
+    }
+    system("burndown.bat");
 }
