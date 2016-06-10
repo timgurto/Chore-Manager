@@ -37,6 +37,9 @@ public:
     void recordStartTime(); // Get current time, and write it to a file.
     void allocate();
 
+    void listTasks(bool includeFinished = false);
+    void finishTask();
+    void unfinishTask();
 };
 
 #endif

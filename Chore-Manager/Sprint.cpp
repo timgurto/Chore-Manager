@@ -138,5 +138,32 @@ void Sprint::setup(){
 
 
 void Sprint::resume(){
+    static const std::string HELP(
+        "Available commands:\n"
+        "h, help      Display this help text\n"
+        "a, add       Add a new chore\n"
+        "r, remove    Remove a chore\n"
+        "l, list      List all chores, and who has given them estimates\n"
+        "e, estimate  Provide your estimates for chores\n"
+        "b, begin     Begin the sprint, locking in estimates and distributing chores\n"
+        "q, quit      Quit the program.  All data will be saved"
+    );
+    std::cout << HELP << std::endl;
 
+    bool beginning = false;
+
+    while (true){
+        std::string command;
+        std::cout << std::endl << PROMPT;
+        std::getline(std::cin, command);
+             if (command == "a" || command == "all")        listTasks(true);
+        else if (command == "f" || command == "finish")     finishTask();
+        else if (command == "l" || command == "list")       listTasks();
+        else if (command == "u" || command == "unfinish")   unfinishTask();
+        else if (command == "q" || command == "quit")     { backup(); break; }
+        else
+            std::cout << "Invalid command." << std::endl;
+
+        backup(); // After every command completes.
+    }
 }
