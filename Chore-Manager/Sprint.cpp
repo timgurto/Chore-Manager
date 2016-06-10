@@ -82,6 +82,7 @@ Sprint::Sprint(){
         rename("sprint/start.dat", ("archive/" + sprintTimes + "-start.dat").c_str());
         rename("sprint/end.dat", ("archive/" + sprintTimes + "-end.dat").c_str());
         rename("sprint/chores.dat", ("archive/" + sprintTimes + "-chores.dat").c_str());
+        rename("sprint/tasks.dat", ("archive/" + sprintTimes + "-tasks.dat").c_str());
 
         // Set up new sprint
         _inProgress = false;
@@ -90,6 +91,36 @@ Sprint::Sprint(){
     
     // 3. Resume progress
     _inProgress = true;
+    {
+        std::ifstream tasksFile("sprint/tasks.dat");
+        while (tasksFile){
+            std::string line;
+            std::getline(tasksFile, line);
+            std::istringstream iss(line);
+            Task task;
+            static const size_t BUF_SIZE = 100;
+            char buffer[BUF_SIZE+1];
+
+            iss.get(buffer, BUF_SIZE, DELIM);
+            std::string name(buffer);
+            iss.ignore();
+
+            if (name == "")
+                continue;
+
+            task.name = name;
+
+            iss >> task.assignee;
+            iss.ignore();
+            iss >> task.effort;
+            iss.ignore();
+            iss >> task.isDone;
+            _tasks.insert(task);
+
+
+        }
+    }
+
 }
 
 void Sprint::setup(){

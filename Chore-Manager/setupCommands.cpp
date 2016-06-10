@@ -164,12 +164,23 @@ void Sprint::remove(){
 }
 
 void Sprint::backup(){
-    std::ofstream choresFile("sprint/chores.dat");
-    for (const Chore &chore : _chores){
-        choresFile << chore.name() << DELIM
-                   << (chore.owner() == "" ? SHARED : chore.owner());
-        for (const std::string &person : _people)
-            choresFile << DELIM << chore.estimate(person);
-        choresFile << std::endl;
+    if (_inProgress) {
+        std::ofstream choresFile("sprint/chores.dat");
+        for (const Chore &chore : _chores){
+            choresFile << chore.name() << DELIM
+                       << (chore.owner() == "" ? SHARED : chore.owner());
+            for (const std::string &person : _people)
+                choresFile << DELIM << chore.estimate(person);
+            choresFile << std::endl;
+        }
+    } else {
+        std::ofstream tasksFile("sprint/tasks.dat");
+        for (const Task &task : _tasks){
+            tasksFile << task.name << DELIM
+                      << task.assignee << DELIM
+                      << task.effort << DELIM
+                      << (task.isDone ? 1 : 0)
+                      << std::endl;
+        }
     }
 }
