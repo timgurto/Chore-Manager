@@ -172,11 +172,10 @@ void Sprint::resume(){
     static const std::string HELP(
         "Available commands:\n"
         "h, help      Display this help text\n"
-        "a, add       Add a new chore\n"
-        "r, remove    Remove a chore\n"
-        "l, list      List all chores, and who has given them estimates\n"
-        "e, estimate  Provide your estimates for chores\n"
-        "b, begin     Begin the sprint, locking in estimates and distributing chores\n"
+        "a, all       List all tasks, include those that are finished\n"
+        "r, finish    Mark a task as finishede\n"
+        "l, list      List all unfinished tasks\n"
+        "e, unfinish  Unmark a task as finished\n"
         "q, quit      Quit the program.  All data will be saved"
     );
     std::cout << HELP << std::endl;
@@ -189,6 +188,7 @@ void Sprint::resume(){
         std::getline(std::cin, command);
              if (command == "a" || command == "all")        listTasks(true);
         else if (command == "f" || command == "finish")     finishTask();
+        else if (command == "h" || command == "help")     std::cout << HELP << std::endl;
         else if (command == "l" || command == "list")       listTasks();
         else if (command == "u" || command == "unfinish")   unfinishTask();
         else if (command == "q" || command == "quit")     { backup(); break; }
