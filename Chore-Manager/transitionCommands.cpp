@@ -219,7 +219,7 @@ void Sprint::getEndTime(){
         timeInfo->tm_mday = day;
         timeInfo->tm_hour = hour;
         timeInfo->tm_min = timeInfo->tm_sec = 0;
-        mktime(timeInfo);
+        endTime = mktime(timeInfo);
 
         std::cout << "The sprint will end at " << asctime(timeInfo)
                   << "Is this correct? (y/n) " << PROMPT;
