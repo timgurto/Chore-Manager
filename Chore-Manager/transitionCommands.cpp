@@ -150,6 +150,7 @@ void Sprint::allocate(){
             task.effort = modifiers[i] * chore.estimate(_people[i]);
             task.isDone = false;
             _tasks.insert(task);
+            effortRemaining[i] += task.effort;
             stacks[i].pop();
         }
 
@@ -169,6 +170,7 @@ void Sprint::allocate(){
         task.effort = modifiers[task.assignee] * chore.estimate(chore.owner());
         task.isDone = false;
         _tasks.insert(task);
+        effortRemaining[task.assignee] += task.effort;
         extra[task.assignee] += task.effort;
     }
 
@@ -236,4 +238,11 @@ void Sprint::getEndTime(){
 void Sprint::recordStartTime(){
     std::ofstream startFile("sprint/start.dat");
     startFile << time(0);
+
+    std::ofstream graphData;
+    graphData.open("sprint/burndown.dat", std::ios_base::app);
+    graphData << time(0);
+    for (size_t i = 0; i != _people.size(); ++i)
+        graphData << ',' << effortRemaining[i];
+    graphData << std::endl;
 }

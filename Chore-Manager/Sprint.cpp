@@ -15,8 +15,10 @@ Sprint::Sprint(){
     {
         std::ifstream peopleFile("people.dat");
         std::string name;
-        while (std::getline(peopleFile, name))
+        while (std::getline(peopleFile, name)){
             _people.push_back(name);
+            effortRemaining.push_back(0);
+        }
     }
 
     /* Check current sprint:
@@ -83,6 +85,7 @@ Sprint::Sprint(){
         rename("sprint/end.dat", ("archive/" + sprintTimes + "-end.dat").c_str());
         rename("sprint/chores.dat", ("archive/" + sprintTimes + "-chores.dat").c_str());
         rename("sprint/tasks.dat", ("archive/" + sprintTimes + "-tasks.dat").c_str());
+        rename("sprint/burndown.dat", ("archive/" + sprintTimes + "-burndown.dat").c_str());
 
         // Set up new sprint
         _inProgress = false;
@@ -117,7 +120,8 @@ Sprint::Sprint(){
             iss >> task.isDone;
             _tasks.insert(task);
 
-
+            if (!task.isDone)
+                effortRemaining[task.assignee] += task.effort;
         }
     }
 
@@ -172,10 +176,11 @@ void Sprint::resume(){
     static const std::string HELP(
         "Available commands:\n"
         "h, help      Display this help text\n"
-        "a, all       List all tasks, include those that are finished\n"
-        "r, finish    Mark a task as finishede\n"
         "l, list      List all unfinished tasks\n"
-        "e, unfinish  Unmark a task as finished\n"
+        "a, all       List all tasks, include those that are finished\n"
+        "f, finish    Mark a task as finishede\n"
+        "u, unfinish  Unmark a task as finished\n"
+        "r, refresh   Refresh the burndown chart\n"
         "q, quit      Quit the program.  All data will be saved"
     );
     std::cout << HELP << std::endl;
@@ -188,9 +193,10 @@ void Sprint::resume(){
         std::getline(std::cin, command);
              if (command == "a" || command == "all")        listTasks(true);
         else if (command == "f" || command == "finish")     finishTask();
-        else if (command == "h" || command == "help")     std::cout << HELP << std::endl;
+        else if (command == "h" || command == "help")       std::cout << HELP << std::endl;
         else if (command == "l" || command == "list")       listTasks();
         else if (command == "u" || command == "unfinish")   unfinishTask();
+        else if (command == "r" || command == "refresh")    refreshChart();
         else if (command == "q" || command == "quit")     { backup(); break; }
         else
             std::cout << "Invalid command." << std::endl;

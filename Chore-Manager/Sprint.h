@@ -40,6 +40,9 @@ public:
     void listTasks(bool includeFinished = false);
     void finishTask();
     void unfinishTask();
+    void refreshChart();
+
+    std::vector<double> effortRemaining; // Remaining effort for each person
 };
 
 #endif

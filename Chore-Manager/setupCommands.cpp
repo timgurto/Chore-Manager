@@ -36,7 +36,7 @@ void Sprint::estimate(){
     }
 
     // Display list, with estimates
-        size_t i = 0;
+    size_t i = 0;
     for (const Chore &chore : _chores){
         if (chore.owner() != "" && chore.owner() != name)
             continue;
@@ -88,6 +88,7 @@ void Sprint::estimate(){
 
     // Estimate all
     std::cout << "Enter an estimate for each item:" << std::endl;
+    i = 0;
     for (const Chore &choreConst : _chores){
         if (choreConst.owner() != "" && choreConst.owner() != name)
             continue;
@@ -164,7 +165,7 @@ void Sprint::remove(){
 }
 
 void Sprint::backup(){
-    if (_inProgress) {
+    if (!_inProgress) {
         std::ofstream choresFile("sprint/chores.dat");
         for (const Chore &chore : _chores){
             choresFile << chore.name() << DELIM

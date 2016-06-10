@@ -12,6 +12,10 @@
 #include "Task.h"
 #include "constants.h"
 
+void clearCin2(){
+    std::cin.clear(); std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 void Sprint::listTasks(bool includeFinished){
 
     size_t i = 0;
@@ -39,9 +43,59 @@ void Sprint::listTasks(bool includeFinished){
 }
 
 void Sprint::finishTask(){
+    size_t i = 0;
+    for (const Task &task : _tasks) {
+        if (task.isDone)
+            continue;
 
+        std::cout << "  "
+                  << (++i < 10 ? " " : "")
+                  << (i < 100 ? " " : "")
+                  << i << "  " << task.name << std::endl;
+    }
+        
+    std::cout << "Please enter the number of the task to finish: " << PROMPT;
+    size_t num;
+    std::cin >> num;
+    clearCin2();
+
+    if (num == 0 || num > i) {
+        std::cout << "Invalid number" << std::endl;
+        return;
+    }
+
+    i = 0;
+    for (const Task &taskConst : _tasks) {
+        Task &task = const_cast<Task &>(taskConst);
+        if (task.isDone)
+            continue;
+        ++i;
+        if (i == num){
+            task.isDone = true;
+
+            std::ofstream graphData;
+            graphData.open("sprint/burndown.dat", std::ios_base::app);
+
+            graphData << time(0);
+            for (size_t i = 0; i != _people.size(); ++i)
+                graphData << ',' << effortRemaining[i];
+            graphData << std::endl;
+
+            effortRemaining[task.assignee] -= task.effort;
+
+            graphData << time(0);
+            for (size_t i = 0; i != _people.size(); ++i)
+                graphData << ',' << effortRemaining[i];
+            graphData << std::endl;
+
+        }
+    }
 }
 
 void Sprint::unfinishTask(){
+
+}
+
+void Sprint::refreshChart(){
 
 }
