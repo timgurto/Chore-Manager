@@ -232,12 +232,12 @@ void Sprint::getEndTime(){
     }
 
     std::ofstream endFile("sprint/end.dat");
-    endFile << endTime;
+    endFile << endTime << std::endl;;
 }
 
 void Sprint::recordStartTime(){
     std::ofstream startFile("sprint/start.dat");
-    startFile << time(0);
+    startFile << time(0) << std::endl;;
 
     std::ofstream graphData;
     graphData.open("sprint/burndown.dat", std::ios_base::app);

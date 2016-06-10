@@ -93,7 +93,7 @@ void Sprint::finishTask(){
 }
 
 void Sprint::unfinishTask(){
-
+    std::cout << "Coming soon!" << std::endl;
 }
 
 void Sprint::refreshChart(){
